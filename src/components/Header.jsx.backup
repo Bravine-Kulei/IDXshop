@@ -1,0 +1,189 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, User, ShoppingCart, Menu } from 'lucide-react';
+import SearchBar from './SearchBar';
+import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Get cart and wishlist data from context
+  const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
+  const isLoggedIn = false;
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearchOpen(false);
+  };
+
+  return (
+    <header className="bg-[#0a0a0a] border-b border-gray-800 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="text-[#00a8ff] font-bold text-xl hover:text-[#0090e0] transition-colors duration-200">
+              techgear
+            </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:block ml-10">
+            <div className="flex space-x-6">
+              <Link to="/" className="text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-sm font-medium">
+                Home
+              </Link>
+              <Link to="/products" className="text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-sm font-medium">
+                Products
+              </Link>
+              <Link to="/support" className="text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-sm font-medium">
+                Support
+              </Link>
+              <Link to="/about" className="text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-sm font-medium">
+                About
+              </Link>
+              <Link to="/contact" className="text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-sm font-medium">
+                Contact
+              </Link>
+            </div>
+          </nav>
+
+          {/* Desktop Right Icons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={toggleSearch}
+              className="text-gray-300 hover:text-white focus:outline-none"
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+            <Link to={isLoggedIn ? "/profile" : "/login"} className="text-gray-300 hover:text-white">
+              <User className="h-5 w-5" />
+            </Link>
+            <Link to="/cart" className="text-gray-300 hover:text-white relative">
+              <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#00a8ff] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              className="text-gray-300 hover:text-white"
+              onClick={toggleMenu}
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-[#0a0a0a] border-t border-gray-800 py-2">
+          <div className="px-4 pt-2 pb-3 space-y-1">
+            <Link
+              to="/"
+              className="block text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-base font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/products"
+              className="block text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-base font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Products
+            </Link>
+            <Link
+              to="/support"
+              className="block text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-base font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Support
+            </Link>
+            <Link
+              to="/about"
+              className="block text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-base font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className="block text-gray-300 hover:text-[#00a8ff] px-3 py-2 text-base font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact
+            </Link>
+          </div>
+
+          <div className="px-4 py-3 border-t border-gray-800">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  toggleSearch();
+                }}
+                className="text-gray-300 hover:text-white focus:outline-none"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+              <Link
+                to={isLoggedIn ? "/profile" : "/login"}
+                className="text-gray-300 hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <User className="h-5 w-5" />
+              </Link>
+              <Link
+                to="/cart"
+                className="text-gray-300 hover:text-white relative"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#00a8ff] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Search Bar Overlay */}
+      {isSearchOpen && (
+        <div className="absolute top-16 left-0 right-0 z-50 bg-[#0a0a0a] border-b border-gray-800 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <SearchBar
+              isOpen={isSearchOpen}
+              onClose={handleSearchClose}
+              className="w-full"
+            />
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Header;
