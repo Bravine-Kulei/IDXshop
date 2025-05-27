@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 import ProfilePage from './pages/ProfilePage';
 import SearchPage from './pages/SearchPage';
 import { AboutPage } from './pages/AboutPage';
@@ -20,6 +20,8 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AdminRoute } from './components/auth/AdminRoute';
 import { SignInPage, SignUpPage } from './pages/auth';
 import { CartProvider } from './contexts/CartContext';
+import { MpesaProvider } from './features/mpesa/contexts/MpesaContext';
+import { MpesaDashboard } from './features/mpesa/pages/MpesaDashboard';
 import { WishlistProvider } from './contexts/WishlistContext';
 import { RecentlyViewedProvider } from './contexts/RecentlyViewedContext';
 
@@ -41,7 +43,8 @@ export default function App() {
     <CartProvider>
       <WishlistProvider>
         <RecentlyViewedProvider>
-          <Router>
+          <MpesaProvider>
+            <Router>
             <div className="flex flex-col min-h-screen bg-[#0a0a0a] text-white">
               <Header />
               <main className="flex-grow">
@@ -74,6 +77,11 @@ export default function App() {
                       <ProfilePage />
                     </ProtectedRoute>
                   } />
+                  <Route path="/mpesa" element={
+                    <ProtectedRoute>
+                      <MpesaDashboard />
+                    </ProtectedRoute>
+                  } />
 
                   {/* Admin Routes - Require Admin Role */}
                   <Route path="/admin" element={
@@ -98,7 +106,8 @@ export default function App() {
               </main>
               <Footer />
             </div>
-          </Router>
+            </Router>
+          </MpesaProvider>
         </RecentlyViewedProvider>
       </WishlistProvider>
     </CartProvider>

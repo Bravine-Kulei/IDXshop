@@ -5,45 +5,45 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import LazyLoad from '../components/LazyLoad';
 
-// Mock data for products
+// Mock data for products - using actual database UUIDs
 const MOCK_PRODUCTS = [
   {
-    id: 1,
+    id: '00000000-0000-0000-0000-000000000001',
     name: 'Gaming Laptop Pro X',
     category: 'Laptops',
-    price: 1299.99,
-    originalPrice: 1499.99,
-    image: 'https://placehold.co/300x300?text=Gaming+Laptop',
+    price: 1099.99,
+    originalPrice: 1299.99,
+    image: 'https://placehold.co/300x300?text=Gaming+Laptop+Pro+X',
     rating: 4.5,
     reviews: 128,
-    discount: 13
+    discount: 15
   },
   {
-    id: 2,
+    id: '00000000-0000-0000-0000-000000000002',
     name: 'Mechanical RGB Keyboard',
     category: 'Peripherals',
     price: 129.99,
-    image: 'https://placehold.co/300x300?text=Keyboard',
+    image: 'https://placehold.co/300x300?text=Mechanical+RGB+Keyboard',
     rating: 4.7,
     reviews: 245
   },
   {
-    id: 3,
+    id: '00000000-0000-0000-0000-000000000003',
     name: 'Wireless Gaming Mouse',
     category: 'Peripherals',
-    price: 79.99,
-    originalPrice: 99.99,
-    image: 'https://placehold.co/300x300?text=Mouse',
+    price: 69.99,
+    originalPrice: 79.99,
+    image: 'https://placehold.co/300x300?text=Wireless+Gaming+Mouse',
     rating: 4.6,
     reviews: 189,
-    discount: 20
+    discount: 12
   },
   {
-    id: 4,
+    id: '00000000-0000-0000-0000-000000000004',
     name: 'RTX 4070 Graphics Card',
     category: 'Components',
     price: 599.99,
-    image: 'https://placehold.co/300x300?text=GPU',
+    image: 'https://placehold.co/300x300?text=RTX+4070+Graphics+Card',
     rating: 4.8,
     reviews: 156
   },

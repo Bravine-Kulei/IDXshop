@@ -66,9 +66,38 @@ const ProductPage = () => {
         // In a real app, you would use the API call below
         // const response = await axios.get(`/api/products/${slug}`);
 
-        // Mock product data
-        const mockProduct = {
-          id: parseInt(slug),
+        // Mock product data - use actual database UUID if available
+        const productMap = {
+          '00000000-0000-0000-0000-000000000001': {
+            id: '00000000-0000-0000-0000-000000000001',
+            name: "Gaming Laptop Pro X",
+            brand: "TechGear",
+            model: "Pro X",
+            description: "High-performance gaming laptop with RGB lighting. Perfect for gaming and content creation.",
+            regularPrice: 1299.99,
+            salePrice: 1099.99,
+            stockQuantity: 15,
+            sku: "TG-LAPTOP-001",
+            minOrderQuantity: 1,
+            maxOrderQuantity: 2,
+          },
+          '00000000-0000-0000-0000-000000000002': {
+            id: '00000000-0000-0000-0000-000000000002',
+            name: "Mechanical RGB Keyboard",
+            brand: "TechGear",
+            model: "K2",
+            description: "Mechanical keyboard with customizable RGB lighting and premium switches.",
+            regularPrice: 129.99,
+            salePrice: null,
+            stockQuantity: 50,
+            sku: "TG-KB-002",
+            minOrderQuantity: 1,
+            maxOrderQuantity: 3,
+          }
+        };
+
+        const mockProduct = productMap[slug] || {
+          id: slug,
           name: "Premium Gaming Laptop",
           brand: "TechPro",
           model: "X9000",
@@ -144,12 +173,12 @@ const ProductPage = () => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     try {
       setAddingToCart(true);
 
-      // Add to cart using context
-      addToCart(product, quantity);
+      // Add to cart using context (pass productId instead of entire product)
+      await addToCart(product.id.toString(), quantity);
 
       // Clear any existing timeout
       if (timeoutRef.current) {

@@ -82,15 +82,19 @@ const QuickView = ({ product, isOpen, onClose }) => {
   }, [product, isInWishlist]);
 
   // Function for adding to cart
-  const addToCart = () => {
+  const addToCart = async () => {
     if (product) {
-      // Add to cart using context
-      contextAddToCart(product, quantity);
+      try {
+        // Add to cart using context (pass productId instead of entire product)
+        await contextAddToCart(product.id.toString(), quantity);
 
-      console.log(`Added ${quantity} of ${product.name} to cart`);
+        console.log(`Added ${quantity} of ${product.name} to cart`);
 
-      // Close the modal
-      onClose();
+        // Close the modal
+        onClose();
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
     }
   };
 

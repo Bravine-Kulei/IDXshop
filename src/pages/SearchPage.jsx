@@ -2,74 +2,74 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 
-// Mock product data - in a real app, this would come from an API
+// Mock product data - using actual database UUIDs
 const MOCK_PRODUCTS = [
-  { 
-    id: 1, 
-    name: 'Gaming Laptop Pro X', 
+  {
+    id: '00000000-0000-0000-0000-000000000001',
+    name: 'Gaming Laptop Pro X',
     category: 'Laptops',
-    price: 1299.99,
-    image: 'https://placehold.co/300x200',
+    price: 1099.99,
+    image: 'https://placehold.co/300x200?text=Gaming+Laptop+Pro+X',
     rating: 4.5,
     reviews: 128
   },
-  { 
-    id: 2, 
-    name: 'Mechanical RGB Keyboard', 
+  {
+    id: '00000000-0000-0000-0000-000000000002',
+    name: 'Mechanical RGB Keyboard',
     category: 'Peripherals',
     price: 129.99,
-    image: 'https://placehold.co/300x200',
+    image: 'https://placehold.co/300x200?text=Mechanical+RGB+Keyboard',
     rating: 4.7,
     reviews: 245
   },
-  { 
-    id: 3, 
-    name: 'Wireless Gaming Mouse', 
+  {
+    id: '00000000-0000-0000-0000-000000000003',
+    name: 'Wireless Gaming Mouse',
     category: 'Peripherals',
-    price: 79.99,
-    image: 'https://placehold.co/300x200',
+    price: 69.99,
+    image: 'https://placehold.co/300x200?text=Wireless+Gaming+Mouse',
     rating: 4.6,
     reviews: 189
   },
-  { 
-    id: 4, 
-    name: 'RTX 4070 Graphics Card', 
+  {
+    id: '00000000-0000-0000-0000-000000000004',
+    name: 'RTX 4070 Graphics Card',
     category: 'Components',
     price: 599.99,
-    image: 'https://placehold.co/300x200',
+    image: 'https://placehold.co/300x200?text=RTX+4070+Graphics+Card',
     rating: 4.8,
     reviews: 156
   },
-  { 
-    id: 5, 
-    name: '1TB NVMe SSD', 
+  {
+    id: 5,
+    name: '1TB NVMe SSD',
     category: 'Storage',
     price: 119.99,
     image: 'https://placehold.co/300x200',
     rating: 4.9,
     reviews: 312
   },
-  { 
-    id: 6, 
-    name: '27" 144Hz Gaming Monitor', 
+  {
+    id: 6,
+    name: '27" 144Hz Gaming Monitor',
     category: 'Displays',
     price: 299.99,
     image: 'https://placehold.co/300x200',
     rating: 4.7,
     reviews: 178
   },
-  { 
-    id: 7, 
-    name: 'USB-C Hub 7-in-1', 
+  {
+    id: 7,
+    name: 'USB-C Hub 7-in-1',
     category: 'Accessories',
     price: 39.99,
     image: 'https://placehold.co/300x200',
     rating: 4.4,
     reviews: 95
   },
-  { 
-    id: 8, 
-    name: 'Laptop Cooling Pad', 
+  {
+    id: 8,
+    name: 'Laptop Cooling Pad',
     category: 'Accessories',
     price: 29.99,
     image: 'https://placehold.co/300x200',
@@ -105,20 +105,20 @@ const SearchPage = () => {
   // Filter and sort products based on search term, category, and sort option
   useEffect(() => {
     let results = [...MOCK_PRODUCTS];
-    
+
     // Filter by search term
     if (searchTerm) {
-      results = results.filter(product => 
+      results = results.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
+
     // Filter by category
     if (selectedCategory !== 'All Categories') {
       results = results.filter(product => product.category === selectedCategory);
     }
-    
+
     // Sort results
     switch (sortOption) {
       case 'price-low':
@@ -136,7 +136,7 @@ const SearchPage = () => {
         // For now, we'll just keep the default order
         break;
     }
-    
+
     setFilteredProducts(results);
   }, [searchTerm, selectedCategory, sortOption]);
 
@@ -144,7 +144,7 @@ const SearchPage = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setSearchParams({ q: searchTerm });
-    
+
     // Add to search history
     const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
     const newHistory = [
@@ -160,7 +160,7 @@ const SearchPage = () => {
         <h1 className="text-3xl font-bold mb-4">
           {searchTerm ? `Search Results for "${searchTerm}"` : 'Search Products'}
         </h1>
-        
+
         {/* Search form */}
         <form onSubmit={handleSearch} className="max-w-2xl">
           <div className="relative">
@@ -181,7 +181,7 @@ const SearchPage = () => {
           </div>
         </form>
       </div>
-      
+
       {/* Filters and sorting */}
       <div className="flex flex-col md:flex-row justify-between mb-6">
         <div className="flex flex-wrap gap-2 mb-4 md:mb-0">
@@ -199,7 +199,7 @@ const SearchPage = () => {
             </button>
           ))}
         </div>
-        
+
         <div className="flex items-center">
           <label htmlFor="sort" className="text-gray-400 mr-2">Sort by:</label>
           <select
@@ -215,7 +215,7 @@ const SearchPage = () => {
           </select>
         </div>
       </div>
-      
+
       {/* Search results */}
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -245,7 +245,7 @@ const SearchPage = () => {
           </div>
           <h2 className="text-2xl font-semibold mb-2">No results found</h2>
           <p className="text-gray-400 mb-6">
-            {searchTerm 
+            {searchTerm
               ? `We couldn't find any products matching "${searchTerm}"`
               : 'Try searching for products using the search bar above'}
           </p>

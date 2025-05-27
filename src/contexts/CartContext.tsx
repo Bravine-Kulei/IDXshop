@@ -50,22 +50,27 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const totalAmount = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
   const refreshCart = async () => {
-    if (!isSignedIn) {
-      setItems([]);
-      return;
-    }
-
     try {
       setLoading(true);
-      const token = await getToken();
-      const response = await axios.get('/cart', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      setItems(response.data.data.items || []);
+      console.log('🔄 Refreshing cart from backend...');
+
+      const headers: any = {};
+
+      // Add authorization header if user is signed in
+      if (isSignedIn) {
+        const token = await getToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      const response = await axios.get('/cart', { headers });
+
+      // Handle new response format: { success: true, data: { items: [...] } }
+      const cart = response.data.data || response.data;
+      const cartItems = cart.items || [];
+      console.log('🛒 Cart refreshed, items count:', cartItems.length);
+      setItems(cartItems);
     } catch (error) {
-      console.error('Error fetching cart:', error);
+      console.error('❌ Error fetching cart:', error);
       setItems([]);
     } finally {
       setLoading(false);
@@ -73,20 +78,20 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const addToCart = async (productId: string, quantity: number = 1) => {
-    if (!isSignedIn) {
-      throw new Error('Please sign in to add items to cart');
-    }
-
     try {
-      const token = await getToken();
-      await axios.post('/cart/add', {
+      const headers: any = {};
+
+      // Add authorization header if user is signed in
+      if (isSignedIn) {
+        const token = await getToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      await axios.post('/cart/items', {
         productId,
         quantity
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      }, { headers });
+
       await refreshCart();
     } catch (error) {
       console.error('Error adding to cart:', error);

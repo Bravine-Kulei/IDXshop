@@ -3,14 +3,26 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 
 const CartPage = () => {
-  // Get cart data and functions from context
-  const { cartItems, cartTotal, updateQuantity, removeFromCart } = useCart();
+  // Get cart data and functions from context (using TypeScript context API)
+  const { items, totalAmount, loading, updateQuantity, removeFromCart } = useCart();
 
   // Calculate additional costs
-  const subtotal = cartTotal;
-  const shipping = cartItems.length > 0 ? 10.00 : 0;
+  const subtotal = totalAmount;
+  const shipping = items.length > 0 ? 10.00 : 0;
   const tax = subtotal * 0.07;
   const total = subtotal + shipping + tax;
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-lg">Loading cart...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Update quantity wrapper
   const handleUpdateQuantity = (id, newQuantity) => {
@@ -27,7 +39,7 @@ const CartPage = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
 
-      {cartItems.length === 0 ? (
+      {items.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-xl mb-4">Your cart is empty</p>
           <Link to="/products" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -49,12 +61,12 @@ const CartPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartItems.map(item => (
+                  {items.map(item => (
                     <tr key={item.id} className="border-t border-gray-700">
                       <td className="py-4 px-4">
                         <div className="flex items-center">
-                          <img src={item.image} alt={item.name} className="w-16 h-16 mr-4 rounded" />
-                          <span>{item.name}</span>
+                          <img src={item.product.imageUrl} alt={item.product.name} className="w-16 h-16 mr-4 rounded" />
+                          <span>{item.product.name}</span>
                         </div>
                       </td>
                       <td className="py-4 px-4">
@@ -79,8 +91,8 @@ const CartPage = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-right">${(item.price || 0).toFixed(2)}</td>
-                      <td className="py-4 px-4 text-right">${((item.price || 0) * item.quantity).toFixed(2)}</td>
+                      <td className="py-4 px-4 text-right">${(item.product.price || 0).toFixed(2)}</td>
+                      <td className="py-4 px-4 text-right">${((item.product.price || 0) * item.quantity).toFixed(2)}</td>
                       <td className="py-4 px-4 text-right">
                         <button
                           onClick={() => removeItem(item.id)}

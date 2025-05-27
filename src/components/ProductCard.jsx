@@ -33,7 +33,7 @@ const ProductCard = ({ product }) => {
   }, [isInWishlist, product.id]);
 
   // Function for adding to cart with visual feedback
-  const addToCart = (e) => {
+  const addToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -43,8 +43,8 @@ const ProductCard = ({ product }) => {
     setIsAddedToCart(true);
 
     try {
-      // Add to cart using context
-      contextAddToCart(product, 1);
+      // Add to cart using context (pass productId instead of entire product)
+      await contextAddToCart(product.id.toString(), 1);
       console.log(`Successfully called contextAddToCart for ${product.name}`);
     } catch (error) {
       console.error('Error adding to cart:', error);
